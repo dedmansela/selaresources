@@ -6,7 +6,7 @@
     <title>SELA Resources for Law Students</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         * {
@@ -17,9 +17,9 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #ffffff;
-            color: #1c1c1c;
-            padding: 40px 20px;
+            background-color: #f8fafc;
+            color: #0f172a;
+            padding: 30px 20px;
             display: flex;
             justify-content: center;
             min-height: 100vh;
@@ -31,153 +31,195 @@
             margin: 0 auto;
         }
 
-        .top-bar {
-            height: 40px;
-            background-color: #354ca1;
-            margin: -40px -20px 40px -20px;
-        }
-
         .header {
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 36px;
         }
 
         .header-law-logo {
-            max-width: 300px;
+            max-width: 320px;
             width: 100%;
             height: auto;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
         }
 
         .header h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 46px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 48px;
             font-weight: 700;
-            color: #000000;
-            line-height: 1.2;
-            letter-spacing: -0.5px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #354ca1;
+            line-height: 1.1;
         }
 
         .resource-layout {
             display: flex;
-            gap: 60px;
+            gap: 40px;
             align-items: flex-start;
         }
 
         .sidebar {
-            width: 280px;
+            width: 260px;
             flex-shrink: 0;
-            border-right: 1px solid #e5e5e5;
-            padding-right: 20px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
         }
 
         .sidebar-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 18px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 16px;
             font-weight: 700;
-            color: #000000;
-            padding-bottom: 12px;
-            border-bottom: 2px solid #000000;
-            margin-bottom: 16px;
+            text-transform: uppercase;
+            color: #354ca1;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #cc0000;
+            margin-bottom: 14px;
+            letter-spacing: 0.5px;
         }
 
         .nav-list {
             list-style: none;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 8px;
         }
 
         .nav-item {
-            font-size: 15px;
-            font-weight: 500;
-            color: #666666;
+            font-size: 14px;
+            font-weight: 600;
+            color: #64748b;
             cursor: pointer;
-            padding: 6px 0;
-            transition: color 0.2s ease;
-            line-height: 1.4;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            line-height: 1.3;
         }
 
         .nav-item:hover {
-            color: #000000;
+            color: #354ca1;
+            background-color: #f1f5f9;
         }
 
         .nav-item.active {
-            color: #000000;
+            color: #ffffff;
+            background-color: #354ca1;
             font-weight: 700;
         }
 
         .content-area {
             flex-grow: 1;
-            padding-top: 5px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+            min-height: 380px;
+        }
+
+        .category-heading {
+            font-family: 'Oswald', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #354ca1;
+            margin-bottom: 20px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e2e8f0;
         }
 
         .resource-list {
             display: flex;
             flex-direction: column;
-            gap: 24px;
+            gap: 20px;
         }
 
         .resource-item {
+            padding-bottom: 16px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .resource-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .item-header-row {
             display: flex;
-            flex-direction: column;
-            gap: 4px;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 12px;
         }
 
         .resource-link {
             font-size: 18px;
-            font-weight: 600;
-            color: #1a0dab;
+            font-weight: 700;
+            color: #354ca1;
             text-decoration: underline;
             transition: color 0.15s ease;
-            display: inline-block;
         }
 
         .resource-link:hover {
-            color: #000000;
+            color: #cc0000;
+        }
+
+        .credits-tag {
+            font-size: 13px;
+            font-weight: 700;
+            color: #475569;
+            background-color: #f1f5f9;
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid #cbd5e1;
+            white-space: nowrap;
         }
 
         .resource-desc {
             font-size: 14px;
-            font-style: italic;
-            color: #555555;
-            line-height: 1.5;
+            color: #475569;
+            margin-top: 4px;
+            line-height: 1.4;
+        }
+
+        .staff-email {
+            font-size: 13px;
+            font-weight: 600;
+            color: #cc0000;
+            margin-top: 3px;
         }
 
         .empty-message {
-            font-size: 15px;
-            color: #777;
+            font-size: 14px;
+            color: #94a3b8;
             font-style: italic;
+            padding: 20px 0;
         }
 
         @media (max-width: 768px) {
             .resource-layout {
                 flex-direction: column;
-                gap: 30px;
+                gap: 20px;
             }
 
             .sidebar {
                 width: 100%;
-                border-right: none;
-                border-bottom: 1px solid #e5e5e5;
-                padding-right: 0;
-                padding-bottom: 20px;
             }
 
             .header h1 {
-                font-size: 32px;
+                font-size: 36px;
             }
         }
     </style>
 </head>
 <body>
 
-    <div class="top-bar"></div>
-
     <div class="container">
         <header class="header">
             <img src="logo_smu.jpg" alt="SMU Dedman School of Law" class="header-law-logo">
-            <h1>SELA Resources for Law Students</h1>
+            <h1>SELA RESOURCES FOR LAW STUDENTS</h1>
         </header>
 
         <div class="resource-layout">
@@ -195,6 +237,7 @@
             </aside>
 
             <main class="content-area">
+                <div class="category-heading" id="categoryTitle">Staff</div>
                 <div class="resource-list" id="resourceContainer"></div>
             </main>
         </div>
@@ -224,6 +267,7 @@
         let activeCategory = 'Staff';
 
         const resourceContainer = document.getElementById('resourceContainer');
+        const categoryTitle = document.getElementById('categoryTitle');
 
         onValue(resourcesRef, (snapshot) => {
             const data = snapshot.val();
@@ -232,17 +276,19 @@
                 Object.keys(data).forEach(key => {
                     resources.push({ id: key, ...data[key] });
                 });
+                resources.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
             }
             renderResources();
         });
 
         window.renderResources = function() {
             resourceContainer.innerHTML = '';
+            categoryTitle.innerText = activeCategory;
 
             const filtered = resources.filter(item => item.category === activeCategory);
 
             if (filtered.length === 0) {
-                resourceContainer.innerHTML = `<div class="empty-message">No resources currently posted under ${activeCategory}.</div>`;
+                resourceContainer.innerHTML = `<div class="empty-message">No entries currently listed under ${activeCategory}.</div>`;
                 return;
             }
 
@@ -250,9 +296,16 @@
                 const div = document.createElement('div');
                 div.className = 'resource-item';
 
+                let creditsHtml = item.credits ? `<span class="credits-tag">(${item.credits})</span>` : '';
+                let emailHtml = item.email ? `<div class="staff-email">Email: ${item.email}</div>` : '';
+
                 div.innerHTML = `
-                    <a href="${item.url || '#'}" target="_blank" rel="noopener noreferrer" class="resource-link">${item.title}</a>
+                    <div class="item-header-row">
+                        <a href="${item.url || '#'}" target="_blank" rel="noopener noreferrer" class="resource-link">${item.title}</a>
+                        ${creditsHtml}
+                    </div>
                     ${item.description ? `<div class="resource-desc">${item.description}</div>` : ''}
+                    ${emailHtml}
                 `;
                 resourceContainer.appendChild(div);
             });
