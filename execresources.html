@@ -252,6 +252,7 @@
                             <option value="Job Board">Job Board</option>
                             <option value="Alumni Working in Sports & Entertainment">Alumni Working in Sports & Entertainment</option>
                             <option value="Resume & Cover Letter Examples">Resume & Cover Letter Examples</option>
+                            <option value="Contact Information">Contact Information</option>
                         </select>
                     </div>
 
@@ -277,7 +278,7 @@
 
                     <div class="input-group" style="grid-column: 1 / -1;">
                         <label for="url" id="urlLabel">Profile Link (URL)</label>
-                        <input type="url" id="url" placeholder="https://..." required>
+                        <input type="url" id="url" placeholder="https://...">
                     </div>
                 </div>
 
@@ -327,6 +328,7 @@
             const urlLabel = document.getElementById('urlLabel');
             const fieldEmail = document.getElementById('fieldEmail');
             const fieldCredits = document.getElementById('fieldCredits');
+            const urlInput = document.getElementById('url');
 
             if (cat === 'Staff') {
                 titleLabel.innerText = 'Staff Name';
@@ -334,18 +336,28 @@
                 urlLabel.innerText = 'Profile Link (URL)';
                 fieldEmail.style.display = 'flex';
                 fieldCredits.style.display = 'none';
+                urlInput.required = true;
+            } else if (cat === 'Contact Information') {
+                titleLabel.innerText = 'Exec Name';
+                descLabel.innerText = 'Exec Role / Title';
+                urlLabel.innerText = 'LinkedIn / Profile URL (Optional)';
+                fieldEmail.style.display = 'flex';
+                fieldCredits.style.display = 'none';
+                urlInput.required = false;
             } else if (cat === 'Classes') {
                 titleLabel.innerText = 'Class Name';
                 descLabel.innerText = 'Course Description';
                 urlLabel.innerText = 'Syllabus / Course Link (URL)';
                 fieldEmail.style.display = 'none';
                 fieldCredits.style.display = 'flex';
+                urlInput.required = true;
             } else {
                 titleLabel.innerText = 'Title / Heading';
                 descLabel.innerText = 'Description / Subtitle';
                 urlLabel.innerText = 'Document / Resource Link (URL)';
                 fieldEmail.style.display = 'none';
                 fieldCredits.style.display = 'none';
+                urlInput.required = true;
             }
         };
 
@@ -400,7 +412,7 @@
                 description: document.getElementById('description').value,
                 email: document.getElementById('email').value || '',
                 credits: document.getElementById('credits').value || '',
-                url: document.getElementById('url').value,
+                url: document.getElementById('url').value || '',
                 timestamp: Date.now()
             };
 
