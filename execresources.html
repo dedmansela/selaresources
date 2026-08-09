@@ -356,13 +356,15 @@
                 Object.keys(data).forEach(key => {
                     dynamicResources.push({ id: key, ...data[key] });
                 });
-                dynamicResources.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
             }
             renderAdminList();
         });
 
         function renderAdminList() {
             adminContainer.innerHTML = '';
+
+            // Force A-Z alphabetical sort before rendering admin cards
+            dynamicResources.sort((a, b) => (a.title || '').trim().localeCompare((b.title || '').trim(), undefined, { sensitivity: 'base' }));
 
             if (dynamicResources.length === 0) {
                 adminContainer.innerHTML = `<div style="text-align:center; color:#64748b; padding:20px;">No resource entries added yet. Use the form above to add staff, classes, or links.</div>`;
