@@ -58,14 +58,12 @@
             letter-spacing: -0.5px;
         }
 
-        /* Two-Column Layout */
         .resource-layout {
             display: flex;
             gap: 60px;
             align-items: flex-start;
         }
 
-        /* Left Sidebar Navigation */
         .sidebar {
             width: 280px;
             flex-shrink: 0;
@@ -109,7 +107,6 @@
             font-weight: 700;
         }
 
-        /* Right Content Area */
         .content-area {
             flex-grow: 1;
             padding-top: 5px;
@@ -184,7 +181,6 @@
         </header>
 
         <div class="resource-layout">
-            <!-- Left Navigation Sidebar -->
             <aside class="sidebar">
                 <div class="sidebar-title">SELA Navigation</div>
                 <ul class="nav-list">
@@ -198,7 +194,6 @@
                 </ul>
             </aside>
 
-            <!-- Main Content Display -->
             <main class="content-area">
                 <div class="resource-list" id="resourceContainer"></div>
             </main>
@@ -225,22 +220,6 @@
         const db = getDatabase(app);
         const resourcesRef = ref(db, 'sela_resources');
 
-        // Preloaded Default Entries
-        const defaultResources = [
-            { id: 'def-1', category: 'Staff', title: 'Beth Lee', description: 'Director, Corporations, Emerging Legal Careers, Small and Mid-Size Firms', url: '#' },
-            { id: 'def-2', category: 'Staff', title: 'Carla Stafford', description: 'Director of Student Affairs', url: '#' },
-            { id: 'def-3', category: 'Staff', title: 'Natalie Leveck', description: 'Senior Counsel, Google and Adjunct Professor Entertainment Law', url: '#' },
-            { id: 'def-4', category: 'Staff', title: 'Alanna Matthews', description: 'CEO Alautus Clothing Company and Adjunct Professor of Fashion Law', url: '#' },
-            { id: 'def-5', category: 'Staff', title: 'Kaleisha Stuart', description: 'Deputy General Counsel Dallas Cowboys and Adjunct Professor Sports Law', url: '#' },
-            { id: 'def-6', category: 'Staff', title: 'Jason Cohen', description: 'General Counsel Dallas Cowboys and Adjunct Professor Sports Law', url: '#' },
-            
-            { id: 'def-7', category: 'Classes', title: 'Sports Law', description: 'Comprehensive legal frameworks in professional and collegiate athletics.', url: '#' },
-            { id: 'def-8', category: 'Classes', title: 'Fashion Law', description: 'Intellectual property, licensing, and business practices in fashion.', url: '#' },
-            { id: 'def-9', category: 'Classes', title: 'Entertainment Law', description: 'Film, music, television, and digital media legal representation.', url: '#' },
-            { id: 'def-10', category: 'Classes', title: 'Transactional Drafting', description: 'Contract negotiation and drafting fundamentals for corporate practice.', url: '#' },
-            { id: 'def-11', category: 'Classes', title: 'Small Business and Trademark Clinic', description: 'Hands-on practical experience representing real client trademark matters.', url: '#' }
-        ];
-
         let resources = [];
         let activeCategory = 'Staff';
 
@@ -248,14 +227,12 @@
 
         onValue(resourcesRef, (snapshot) => {
             const data = snapshot.val();
-            let dbItems = [];
+            resources = [];
             if (data) {
                 Object.keys(data).forEach(key => {
-                    dbItems.push({ id: key, ...data[key] });
+                    resources.push({ id: key, ...data[key] });
                 });
             }
-            // Merge defaults with dynamic DB items
-            resources = [...defaultResources, ...dbItems];
             renderResources();
         });
 
