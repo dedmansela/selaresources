@@ -40,10 +40,11 @@
         }
 
         .header-law-logo {
-            max-width: 320px;
+            max-width: 380px;
             width: 100%;
             height: auto;
-            margin-bottom: 12px;
+            margin: 0 auto 16px auto;
+            display: block;
         }
 
         .header h1 {
@@ -216,13 +217,23 @@
         .btn-delete:hover {
             background: #fee2e2;
         }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 36px;
+            }
+
+            .header-law-logo {
+                max-width: 280px;
+            }
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
         <header class="header">
-            <img src="logo_smu.jpg" alt="SMU Dedman School of Law" class="header-law-logo">
+            <img src="./logo_smu.jpg" alt="SMU Dedman School of Law" class="header-law-logo">
             <h1>SELA RESOURCES ADMIN</h1>
         </header>
 
@@ -345,7 +356,6 @@
                 Object.keys(data).forEach(key => {
                     dynamicResources.push({ id: key, ...data[key] });
                 });
-                // Sort Alphabetically A-Z by Title
                 dynamicResources.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
             }
             renderAdminList();
