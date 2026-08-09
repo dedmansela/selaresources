@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Admin - SELA Resources Board</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -128,6 +131,18 @@
             background-color: #28397a;
         }
 
+        .btn-cancel {
+            background-color: #64748b;
+            color: #ffffff;
+            border: none;
+            padding: 10px 22px;
+            font-size: 13px;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            display: none;
+        }
+
         .resource-admin-list {
             display: flex;
             flex-direction: column;
@@ -142,6 +157,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 16px;
         }
 
         .item-info-cat {
@@ -162,6 +178,28 @@
             font-size: 13px;
             color: #64748b;
             margin-top: 2px;
+            line-height: 1.4;
+        }
+
+        .card-buttons {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .btn-edit {
+            background: #eff6ff;
+            color: #354ca1;
+            border: 1px solid #dbeafe;
+            padding: 6px 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .btn-edit:hover {
+            background: #dbeafe;
         }
 
         .btn-delete {
@@ -174,6 +212,10 @@
             font-weight: 700;
             font-size: 12px;
         }
+
+        .btn-delete:hover {
+            background: #fee2e2;
+        }
     </style>
 </head>
 <body>
@@ -185,8 +227,9 @@
         </header>
 
         <section class="admin-panel">
-            <h2>Add New Resource / Entry</h2>
+            <h2 id="formHeading">Add New Resource / Entry</h2>
             <form id="resourceForm">
+                <input type="hidden" id="editingId" value="">
                 <div class="form-grid">
                     <div class="input-group">
                         <label for="category">Category</label>
@@ -208,7 +251,7 @@
 
                     <div class="input-group" id="fieldDescription">
                         <label for="description" id="descLabel">Position / Title</label>
-                        <input type="text" id="description" placeholder="e.g. Director, Corporations">
+                        <textarea id="description" placeholder="e.g. Director, Corporations" style="height:38px; resize:vertical;"></textarea>
                     </div>
 
                     <div class="input-group" id="fieldEmail">
@@ -218,7 +261,7 @@
 
                     <div class="input-group" id="fieldCredits" style="display: none;">
                         <label for="credits">Credits</label>
-                        <input type="text" id="credits" placeholder="e.g. 3 Credits">
+                        <input type="text" id="credits" placeholder="e.g. 3">
                     </div>
 
                     <div class="input-group" style="grid-column: 1 / -1;">
@@ -228,7 +271,8 @@
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="btn-add">Add Entry</button>
+                    <button type="submit" class="btn-add" id="submitBtn">Add Entry</button>
+                    <button type="button" class="btn-cancel" id="cancelBtn" onclick="resetForm()">Cancel Edit</button>
                 </div>
             </form>
         </section>
@@ -260,6 +304,10 @@
 
         const adminContainer = document.getElementById('adminContainer');
         const resourceForm = document.getElementById('resourceForm');
+        const editingIdInput = document.getElementById('editingId');
+        const formHeading = document.getElementById('formHeading');
+        const submitBtn = document.getElementById('submitBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
 
         window.toggleFields = function() {
             const cat = document.getElementById('category').value;
@@ -320,7 +368,10 @@
                         <div class="item-info-title">${item.title} ${item.credits ? `(${item.credits})` : ''}</div>
                         <div class="item-info-desc">${item.description || ''} ${item.email ? `| Email: ${item.email}` : ''}</div>
                     </div>
-                    <button class="btn-delete" onclick="deleteResource('${item.id}')">Remove</button>
+                    <div class="card-buttons">
+                        <button class="btn-edit" onclick="editResource('${item.id}')">Edit</button>
+                        <button class="btn-delete" onclick="deleteResource('${item.id}')">Remove</button>
+                    </div>
                 `;
                 adminContainer.appendChild(card);
             });
@@ -329,6 +380,7 @@
         resourceForm.addEventListener('submit', (e) => {
             e.preventDefault();
 
+            const editId = editingIdInput.value;
             const payload = {
                 category: document.getElementById('category').value,
                 title: document.getElementById('title').value,
@@ -339,12 +391,45 @@
                 timestamp: Date.now()
             };
 
-            const newRef = push(resourcesRef);
-            set(newRef, payload);
+            if (editId) {
+                set(ref(db, `sela_resources/${editId}`), payload);
+            } else {
+                const newRef = push(resourcesRef);
+                set(newRef, payload);
+            }
 
-            resourceForm.reset();
-            toggleFields();
+            resetForm();
         });
+
+        window.editResource = function(id) {
+            const item = dynamicResources.find(r => r.id === id);
+            if (!item) return;
+
+            editingIdInput.value = item.id;
+            document.getElementById('category').value = item.category;
+            toggleFields();
+
+            document.getElementById('title').value = item.title || '';
+            document.getElementById('description').value = item.description || '';
+            document.getElementById('email').value = item.email || '';
+            document.getElementById('credits').value = item.credits || '';
+            document.getElementById('url').value = item.url || '';
+
+            formHeading.innerText = 'Edit Resource / Entry';
+            submitBtn.innerText = 'Update Entry';
+            cancelBtn.style.display = 'inline-block';
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        window.resetForm = function() {
+            resourceForm.reset();
+            editingIdInput.value = '';
+            formHeading.innerText = 'Add New Resource / Entry';
+            submitBtn.innerText = 'Add Entry';
+            cancelBtn.style.display = 'none';
+            toggleFields();
+        };
 
         window.deleteResource = function(id) {
             if (confirm("Are you sure you want to delete this resource entry?")) {
@@ -352,7 +437,6 @@
             }
         };
 
-        // Initialize fields on load
         toggleFields();
     </script>
 </body>
