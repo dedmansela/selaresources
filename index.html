@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SELA Resources for Law Students</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #ffffff;
+            color: #1c1c1c;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1080px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .top-bar {
+            height: 40px;
+            background-color: #354ca1;
+            margin: -40px -20px 40px -20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .header-law-logo {
+            max-width: 300px;
+            width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 46px;
+            font-weight: 700;
+            color: #000000;
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+        }
+
+        /* Two-Column Layout */
+        .resource-layout {
+            display: flex;
+            gap: 60px;
+            align-items: flex-start;
+        }
+
+        /* Left Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            flex-shrink: 0;
+            border-right: 1px solid #e5e5e5;
+            padding-right: 20px;
+        }
+
+        .sidebar-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #000000;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #000000;
+            margin-bottom: 16px;
+        }
+
+        .nav-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .nav-item {
+            font-size: 15px;
+            font-weight: 500;
+            color: #666666;
+            cursor: pointer;
+            padding: 6px 0;
+            transition: color 0.2s ease;
+            line-height: 1.4;
+        }
+
+        .nav-item:hover {
+            color: #000000;
+        }
+
+        .nav-item.active {
+            color: #000000;
+            font-weight: 700;
+        }
+
+        /* Right Content Area */
+        .content-area {
+            flex-grow: 1;
+            padding-top: 5px;
+        }
+
+        .resource-list {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .resource-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .resource-link {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a0dab;
+            text-decoration: underline;
+            transition: color 0.15s ease;
+            display: inline-block;
+        }
+
+        .resource-link:hover {
+            color: #000000;
+        }
+
+        .resource-desc {
+            font-size: 14px;
+            font-style: italic;
+            color: #555555;
+            line-height: 1.5;
+        }
+
+        .empty-message {
+            font-size: 15px;
+            color: #777;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .resource-layout {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #e5e5e5;
+                padding-right: 0;
+                padding-bottom: 20px;
+            }
+
+            .header h1 {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar"></div>
+
+    <div class="container">
+        <header class="header">
+            <img src="logo_smu.jpg" alt="SMU Dedman School of Law" class="header-law-logo">
+            <h1>SELA Resources for Law Students</h1>
+        </header>
+
+        <div class="resource-layout">
+            <!-- Left Navigation Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-title">SELA Navigation</div>
+                <ul class="nav-list">
+                    <li class="nav-item active" onclick="switchCategory('Staff', this)">Staff</li>
+                    <li class="nav-item" onclick="switchCategory('Classes', this)">Classes</li>
+                    <li class="nav-item" onclick="switchCategory('Events', this)">Events</li>
+                    <li class="nav-item" onclick="switchCategory('Competitions', this)">Competitions</li>
+                    <li class="nav-item" onclick="switchCategory('Job Board', this)">Job Board</li>
+                    <li class="nav-item" onclick="switchCategory('Alumni Working in Sports & Entertainment', this)">Alumni Working in Sports & Entertainment</li>
+                    <li class="nav-item" onclick="switchCategory('Resume & Cover Letter Examples', this)">Resume & Cover Letter Examples</li>
+                </ul>
+            </aside>
+
+            <!-- Main Content Display -->
+            <main class="content-area">
+                <div class="resource-list" id="resourceContainer"></div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Firebase Realtime Sync -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBSauAf8VSdz-Q_bB84MoRsFDJVWuZOSEk",
+            authDomain: "sela-job-board.firebaseapp.com",
+            databaseURL: "https://sela-job-board-default-rtdb.firebaseio.com",
+            projectId: "sela-job-board",
+            storageBucket: "sela-job-board.firebasestorage.app",
+            messagingSenderId: "877535394651",
+            appId: "1:877535394651:web:46bd7ce8b030af8dd1b87e",
+            measurementId: "G-Y4J1XLMJCT"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const resourcesRef = ref(db, 'sela_resources');
+
+        // Preloaded Default Entries
+        const defaultResources = [
+            { id: 'def-1', category: 'Staff', title: 'Beth Lee', description: 'Director, Corporations, Emerging Legal Careers, Small and Mid-Size Firms', url: '#' },
+            { id: 'def-2', category: 'Staff', title: 'Carla Stafford', description: 'Director of Student Affairs', url: '#' },
+            { id: 'def-3', category: 'Staff', title: 'Natalie Leveck', description: 'Senior Counsel, Google and Adjunct Professor Entertainment Law', url: '#' },
+            { id: 'def-4', category: 'Staff', title: 'Alanna Matthews', description: 'CEO Alautus Clothing Company and Adjunct Professor of Fashion Law', url: '#' },
+            { id: 'def-5', category: 'Staff', title: 'Kaleisha Stuart', description: 'Deputy General Counsel Dallas Cowboys and Adjunct Professor Sports Law', url: '#' },
+            { id: 'def-6', category: 'Staff', title: 'Jason Cohen', description: 'General Counsel Dallas Cowboys and Adjunct Professor Sports Law', url: '#' },
+            
+            { id: 'def-7', category: 'Classes', title: 'Sports Law', description: 'Comprehensive legal frameworks in professional and collegiate athletics.', url: '#' },
+            { id: 'def-8', category: 'Classes', title: 'Fashion Law', description: 'Intellectual property, licensing, and business practices in fashion.', url: '#' },
+            { id: 'def-9', category: 'Classes', title: 'Entertainment Law', description: 'Film, music, television, and digital media legal representation.', url: '#' },
+            { id: 'def-10', category: 'Classes', title: 'Transactional Drafting', description: 'Contract negotiation and drafting fundamentals for corporate practice.', url: '#' },
+            { id: 'def-11', category: 'Classes', title: 'Small Business and Trademark Clinic', description: 'Hands-on practical experience representing real client trademark matters.', url: '#' }
+        ];
+
+        let resources = [];
+        let activeCategory = 'Staff';
+
+        const resourceContainer = document.getElementById('resourceContainer');
+
+        onValue(resourcesRef, (snapshot) => {
+            const data = snapshot.val();
+            let dbItems = [];
+            if (data) {
+                Object.keys(data).forEach(key => {
+                    dbItems.push({ id: key, ...data[key] });
+                });
+            }
+            // Merge defaults with dynamic DB items
+            resources = [...defaultResources, ...dbItems];
+            renderResources();
+        });
+
+        window.renderResources = function() {
+            resourceContainer.innerHTML = '';
+
+            const filtered = resources.filter(item => item.category === activeCategory);
+
+            if (filtered.length === 0) {
+                resourceContainer.innerHTML = `<div class="empty-message">No resources currently posted under ${activeCategory}.</div>`;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'resource-item';
+
+                div.innerHTML = `
+                    <a href="${item.url || '#'}" target="_blank" rel="noopener noreferrer" class="resource-link">${item.title}</a>
+                    ${item.description ? `<div class="resource-desc">${item.description}</div>` : ''}
+                `;
+                resourceContainer.appendChild(div);
+            });
+        };
+
+        window.switchCategory = function(category, elem) {
+            activeCategory = category;
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            elem.classList.add('active');
+            renderResources();
+        };
+    </script>
+</body>
+</html>
