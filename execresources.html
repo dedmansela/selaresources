@@ -345,7 +345,8 @@
                 Object.keys(data).forEach(key => {
                     dynamicResources.push({ id: key, ...data[key] });
                 });
-                dynamicResources.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                // Sort Alphabetically A-Z by Title
+                dynamicResources.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
             }
             renderAdminList();
         });
