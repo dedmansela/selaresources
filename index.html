@@ -284,6 +284,26 @@
         const resourceContainer = document.getElementById('resourceContainer');
         const categoryTitle = document.getElementById('categoryTitle');
 
+        const roleHierarchy = {
+            'president': 1,
+            'vice president': 2,
+            'sponsorship chair': 3,
+            'secretary': 4,
+            'treasurer': 5,
+            'social media director': 6,
+            'competitions': 7
+        };
+
+        function getRoleRank(desc) {
+            const cleanDesc = (desc || '').toLowerCase().trim();
+            for (const key in roleHierarchy) {
+                if (cleanDesc.includes(key)) {
+                    return roleHierarchy[key];
+                }
+            }
+            return 99;
+        }
+
         onValue(resourcesRef, (snapshot) => {
             const data = snapshot.val();
             resources = [];
@@ -299,10 +319,13 @@
             resourceContainer.innerHTML = '';
             categoryTitle.innerText = activeCategory;
 
-            // Filter for current category and sort alphabetically A-Z
-            const filtered = resources
-                .filter(item => item.category === activeCategory)
-                .sort((a, b) => (a.title || '').trim().localeCompare((b.title || '').trim(), undefined, { sensitivity: 'base' }));
+            const filtered = resources.filter(item => item.category === activeCategory);
+
+            if (activeCategory === 'Contact Information') {
+                filtered.sort((a, b) => getRoleRank(a.description) - getRoleRank(b.description));
+            } else {
+                filtered.sort((a, b) => (a.title || '').trim().localeCompare((b.title || '').trim(), undefined, { sensitivity: 'base' }));
+            }
 
             if (filtered.length === 0) {
                 resourceContainer.innerHTML = `<div class="empty-message">No entries currently listed under ${activeCategory}.</div>`;
