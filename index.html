@@ -170,6 +170,12 @@
             color: #cc0000;
         }
 
+        .resource-title-plain {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
         .credits-tag {
             font-size: 13px;
             font-weight: 700;
@@ -241,6 +247,7 @@
                     <li class="nav-item" onclick="switchCategory('Job Board', this)">Job Board</li>
                     <li class="nav-item" onclick="switchCategory('Alumni Working in Sports & Entertainment', this)">Alumni Working in Sports & Entertainment</li>
                     <li class="nav-item" onclick="switchCategory('Resume & Cover Letter Examples', this)">Resume & Cover Letter Examples</li>
+                    <li class="nav-item" onclick="switchCategory('Contact Information', this)">Contact Information</li>
                 </ul>
             </aside>
 
@@ -292,7 +299,7 @@
             resourceContainer.innerHTML = '';
             categoryTitle.innerText = activeCategory;
 
-            // Filter for current category and force A-Z alphabetical sort
+            // Filter for current category and sort alphabetically A-Z
             const filtered = resources
                 .filter(item => item.category === activeCategory)
                 .sort((a, b) => (a.title || '').trim().localeCompare((b.title || '').trim(), undefined, { sensitivity: 'base' }));
@@ -307,11 +314,15 @@
                 div.className = 'resource-item';
 
                 let creditsHtml = item.credits ? `<span class="credits-tag">(${item.credits})</span>` : '';
-                let emailHtml = item.email ? `<div class="staff-email">Email: ${item.email}</div>` : '';
+                let emailHtml = item.email ? `<div class="staff-email">Email: <a href="mailto:${item.email}" style="color:#cc0000; text-decoration:underline;">${item.email}</a></div>` : '';
+
+                let titleHtml = (item.url && item.url.trim() !== '' && item.url !== '#')
+                    ? `<a href="${item.url}" target="_blank" rel="noopener noreferrer" class="resource-link">${item.title}</a>`
+                    : `<span class="resource-title-plain">${item.title}</span>`;
 
                 div.innerHTML = `
                     <div class="item-header-row">
-                        <a href="${item.url || '#'}" target="_blank" rel="noopener noreferrer" class="resource-link">${item.title}</a>
+                        ${titleHtml}
                         ${creditsHtml}
                     </div>
                     ${item.description ? `<div class="resource-desc">${item.description}</div>` : ''}
