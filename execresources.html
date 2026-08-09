@@ -6,7 +6,7 @@
     <title>Admin - SELA Resources Board</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         * {
@@ -33,21 +33,24 @@
 
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 24px;
         }
 
         .header-law-logo {
-            max-width: 300px;
+            max-width: 320px;
             width: 100%;
             height: auto;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
 
         .header h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 42px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 48px;
             font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
             color: #354ca1;
+            line-height: 1.1;
         }
 
         .admin-panel {
@@ -55,50 +58,52 @@
             border: 1px solid #e2e8f0;
             border-radius: 12px;
             padding: 24px;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.03);
             border-top: 4px solid #cc0000;
         }
 
         .admin-panel h2 {
-            font-size: 18px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 20px;
             font-weight: 700;
             margin-bottom: 16px;
+            text-transform: uppercase;
             color: #354ca1;
+            letter-spacing: 0.5px;
         }
 
         .form-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 16px;
-            margin-bottom: 16px;
+            gap: 14px;
+            margin-bottom: 14px;
         }
 
         .input-group {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 4px;
         }
 
         .input-group label {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             color: #475569;
             text-transform: uppercase;
         }
 
         .input-group input, .input-group select, .input-group textarea {
-            padding: 10px;
+            padding: 9px 12px;
             border: 1px solid #cbd5e1;
             border-radius: 6px;
-            font-size: 14px;
+            font-size: 13px;
             outline: none;
             font-family: inherit;
         }
 
-        .input-group textarea {
-            resize: vertical;
-            height: 42px;
+        .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+            border-color: #354ca1;
         }
 
         .form-actions {
@@ -111,29 +116,22 @@
             background-color: #354ca1;
             color: #ffffff;
             border: none;
-            padding: 10px 20px;
-            font-size: 14px;
+            padding: 10px 22px;
+            font-size: 13px;
             font-weight: 700;
             border-radius: 6px;
             cursor: pointer;
+            transition: background-color 0.2s ease;
         }
 
-        .btn-cancel {
-            background-color: #64748b;
-            color: #ffffff;
-            border: none;
-            padding: 10px 20px;
-            font-size: 14px;
-            font-weight: 700;
-            border-radius: 6px;
-            cursor: pointer;
-            display: none;
+        .btn-add:hover {
+            background-color: #28397a;
         }
 
         .resource-admin-list {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 12px;
         }
 
         .admin-item-card {
@@ -146,18 +144,18 @@
             align-items: center;
         }
 
-        .item-info-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: #1a0dab;
-        }
-
         .item-info-cat {
             font-size: 11px;
             font-weight: 700;
             text-transform: uppercase;
+            color: #cc0000;
+            margin-bottom: 2px;
+        }
+
+        .item-info-title {
+            font-size: 16px;
+            font-weight: 700;
             color: #354ca1;
-            margin-bottom: 4px;
         }
 
         .item-info-desc {
@@ -170,10 +168,10 @@
             background: #fef2f2;
             color: #ef4444;
             border: 1px solid #fee2e2;
-            padding: 6px 12px;
+            padding: 6px 14px;
             border-radius: 4px;
             cursor: pointer;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 12px;
         }
     </style>
@@ -187,13 +185,12 @@
         </header>
 
         <section class="admin-panel">
-            <h2 id="formHeading">Add New Resource / Entry</h2>
+            <h2>Add New Resource / Entry</h2>
             <form id="resourceForm">
-                <input type="hidden" id="editingId" value="">
                 <div class="form-grid">
                     <div class="input-group">
                         <label for="category">Category</label>
-                        <select id="category" required>
+                        <select id="category" onchange="toggleFields()" required>
                             <option value="Staff">Staff</option>
                             <option value="Classes">Classes</option>
                             <option value="Events">Events</option>
@@ -203,22 +200,35 @@
                             <option value="Resume & Cover Letter Examples">Resume & Cover Letter Examples</option>
                         </select>
                     </div>
+
                     <div class="input-group">
-                        <label for="title">Title / Name</label>
+                        <label for="title" id="titleLabel">Staff Name</label>
                         <input type="text" id="title" placeholder="e.g. Beth Lee" required>
                     </div>
-                    <div class="input-group">
-                        <label for="url">Profile / Document Link (URL)</label>
+
+                    <div class="input-group" id="fieldDescription">
+                        <label for="description" id="descLabel">Position / Title</label>
+                        <input type="text" id="description" placeholder="e.g. Director, Corporations">
+                    </div>
+
+                    <div class="input-group" id="fieldEmail">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" placeholder="e.g. bethlee@smu.edu">
+                    </div>
+
+                    <div class="input-group" id="fieldCredits" style="display: none;">
+                        <label for="credits">Credits</label>
+                        <input type="text" id="credits" placeholder="e.g. 3 Credits">
+                    </div>
+
+                    <div class="input-group" style="grid-column: 1 / -1;">
+                        <label for="url" id="urlLabel">Profile Link (URL)</label>
                         <input type="url" id="url" placeholder="https://..." required>
                     </div>
-                    <div class="input-group" style="grid-column: 1 / -1;">
-                        <label for="description">Subtitle / Organization Description</label>
-                        <textarea id="description" placeholder="e.g. Director, Corporations, Emerging Legal Careers"></textarea>
-                    </div>
                 </div>
+
                 <div class="form-actions">
-                    <button type="submit" class="btn-add" id="submitBtn">Add Resource Entry</button>
-                    <button type="button" class="btn-cancel" id="cancelBtn" onclick="resetForm()">Cancel Edit</button>
+                    <button type="submit" class="btn-add">Add Entry</button>
                 </div>
             </form>
         </section>
@@ -251,6 +261,35 @@
         const adminContainer = document.getElementById('adminContainer');
         const resourceForm = document.getElementById('resourceForm');
 
+        window.toggleFields = function() {
+            const cat = document.getElementById('category').value;
+            const titleLabel = document.getElementById('titleLabel');
+            const descLabel = document.getElementById('descLabel');
+            const urlLabel = document.getElementById('urlLabel');
+            const fieldEmail = document.getElementById('fieldEmail');
+            const fieldCredits = document.getElementById('fieldCredits');
+
+            if (cat === 'Staff') {
+                titleLabel.innerText = 'Staff Name';
+                descLabel.innerText = 'Position / Title';
+                urlLabel.innerText = 'Profile Link (URL)';
+                fieldEmail.style.display = 'flex';
+                fieldCredits.style.display = 'none';
+            } else if (cat === 'Classes') {
+                titleLabel.innerText = 'Class Name';
+                descLabel.innerText = 'Course Description';
+                urlLabel.innerText = 'Syllabus / Course Link (URL)';
+                fieldEmail.style.display = 'none';
+                fieldCredits.style.display = 'flex';
+            } else {
+                titleLabel.innerText = 'Title / Heading';
+                descLabel.innerText = 'Description / Subtitle';
+                urlLabel.innerText = 'Document / Resource Link (URL)';
+                fieldEmail.style.display = 'none';
+                fieldCredits.style.display = 'none';
+            }
+        };
+
         onValue(resourcesRef, (snapshot) => {
             const data = snapshot.val();
             dynamicResources = [];
@@ -258,6 +297,7 @@
                 Object.keys(data).forEach(key => {
                     dynamicResources.push({ id: key, ...data[key] });
                 });
+                dynamicResources.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
             }
             renderAdminList();
         });
@@ -266,7 +306,7 @@
             adminContainer.innerHTML = '';
 
             if (dynamicResources.length === 0) {
-                adminContainer.innerHTML = `<div style="text-align:center; color:#64748b;">No resource entries added yet. Use the form above to add staff, classes, or documents.</div>`;
+                adminContainer.innerHTML = `<div style="text-align:center; color:#64748b; padding:20px;">No resource entries added yet. Use the form above to add staff, classes, or links.</div>`;
                 return;
             }
 
@@ -277,8 +317,8 @@
                 card.innerHTML = `
                     <div>
                         <div class="item-info-cat">${item.category}</div>
-                        <div class="item-info-title">${item.title}</div>
-                        <div class="item-info-desc">${item.description || 'No subtitle provided'}</div>
+                        <div class="item-info-title">${item.title} ${item.credits ? `(${item.credits})` : ''}</div>
+                        <div class="item-info-desc">${item.description || ''} ${item.email ? `| Email: ${item.email}` : ''}</div>
                     </div>
                     <button class="btn-delete" onclick="deleteResource('${item.id}')">Remove</button>
                 `;
@@ -292,8 +332,10 @@
             const payload = {
                 category: document.getElementById('category').value,
                 title: document.getElementById('title').value,
-                url: document.getElementById('url').value,
                 description: document.getElementById('description').value,
+                email: document.getElementById('email').value || '',
+                credits: document.getElementById('credits').value || '',
+                url: document.getElementById('url').value,
                 timestamp: Date.now()
             };
 
@@ -301,6 +343,7 @@
             set(newRef, payload);
 
             resourceForm.reset();
+            toggleFields();
         });
 
         window.deleteResource = function(id) {
@@ -308,6 +351,9 @@
                 remove(ref(db, `sela_resources/${id}`));
             }
         };
+
+        // Initialize fields on load
+        toggleFields();
     </script>
 </body>
 </html>
