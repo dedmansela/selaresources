@@ -284,7 +284,6 @@
                 Object.keys(data).forEach(key => {
                     resources.push({ id: key, ...data[key] });
                 });
-                resources.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
             }
             renderResources();
         });
@@ -293,7 +292,10 @@
             resourceContainer.innerHTML = '';
             categoryTitle.innerText = activeCategory;
 
-            const filtered = resources.filter(item => item.category === activeCategory);
+            // Filter for current category and force A-Z alphabetical sort
+            const filtered = resources
+                .filter(item => item.category === activeCategory)
+                .sort((a, b) => (a.title || '').trim().localeCompare((b.title || '').trim(), undefined, { sensitivity: 'base' }));
 
             if (filtered.length === 0) {
                 resourceContainer.innerHTML = `<div class="empty-message">No entries currently listed under ${activeCategory}.</div>`;
