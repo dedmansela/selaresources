@@ -130,7 +130,6 @@
             display: none;
         }
 
-        /* List View */
         .resource-admin-list {
             display: flex;
             flex-direction: column;
@@ -267,7 +266,7 @@
             adminContainer.innerHTML = '';
 
             if (dynamicResources.length === 0) {
-                adminContainer.innerHTML = `<div style="text-align:center; color:#64748b;">No custom dynamic entries added yet. Preloaded defaults display on the public board automatically.</div>`;
+                adminContainer.innerHTML = `<div style="text-align:center; color:#64748b;">No resource entries added yet. Use the form above to add staff, classes, or documents.</div>`;
                 return;
             }
 
