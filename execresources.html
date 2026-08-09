@@ -321,6 +321,26 @@
         const submitBtn = document.getElementById('submitBtn');
         const cancelBtn = document.getElementById('cancelBtn');
 
+        const roleHierarchy = {
+            'president': 1,
+            'vice president': 2,
+            'sponsorship chair': 3,
+            'secretary': 4,
+            'treasurer': 5,
+            'social media director': 6,
+            'competitions': 7
+        };
+
+        function getRoleRank(desc) {
+            const cleanDesc = (desc || '').toLowerCase().trim();
+            for (const key in roleHierarchy) {
+                if (cleanDesc.includes(key)) {
+                    return roleHierarchy[key];
+                }
+            }
+            return 99;
+        }
+
         window.toggleFields = function() {
             const cat = document.getElementById('category').value;
             const titleLabel = document.getElementById('titleLabel');
@@ -375,8 +395,12 @@
         function renderAdminList() {
             adminContainer.innerHTML = '';
 
-            // Force A-Z alphabetical sort before rendering admin cards
-            dynamicResources.sort((a, b) => (a.title || '').trim().localeCompare((b.title || '').trim(), undefined, { sensitivity: 'base' }));
+            dynamicResources.sort((a, b) => {
+                if (a.category === 'Contact Information' && b.category === 'Contact Information') {
+                    return getRoleRank(a.description) - getRoleRank(b.description);
+                }
+                return (a.title || '').trim().localeCompare((b.title || '').trim(), undefined, { sensitivity: 'base' });
+            });
 
             if (dynamicResources.length === 0) {
                 adminContainer.innerHTML = `<div style="text-align:center; color:#64748b; padding:20px;">No resource entries added yet. Use the form above to add staff, classes, or links.</div>`;
