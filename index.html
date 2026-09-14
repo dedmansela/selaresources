@@ -8,17 +8,13 @@
             const urlParams = new URLSearchParams(window.location.search);
             const tokenInUrl = urlParams.get('sela_key');
 
-            // 1. If arriving with the secret key from SMU 360, grant and save access
             if (tokenInUrl === VALID_TOKEN) {
                 localStorage.setItem("sela_member_unlocked", "true");
-                // Cleans the URL bar immediately so nobody sees or copies the key
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
 
-            // 2. Check if this visitor is authorized
             const isAuthorized = localStorage.getItem("sela_member_unlocked") === "true";
 
-            // 3. If NOT authorized, kick them straight to the SMU 360 login
             if (!isAuthorized) {
                 document.documentElement.style.display = "none";
                 window.location.replace("https://smu360.smu.edu/home_login");
@@ -35,7 +31,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <style>
         * {
             box-sizing: border-box;
