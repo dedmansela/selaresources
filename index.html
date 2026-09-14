@@ -1,23 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- SELA Member Gatekeeper -->
+    <!-- SELA Member Access Gatekeeper -->
     <script>
         (function() {
             const VALID_TOKEN = "smu_sela_verified_2026";
             const urlParams = new URLSearchParams(window.location.search);
             const tokenInUrl = urlParams.get('sela_key');
 
+            // 1. If arriving with the key (after login), save authorization
             if (tokenInUrl === VALID_TOKEN) {
                 localStorage.setItem("sela_member_unlocked", "true");
+                // Clean the token from the browser address bar immediately
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
 
+            // 2. Check if this visitor is authorized
             const isAuthorized = localStorage.getItem("sela_member_unlocked") === "true";
 
+            // 3. If unauthorized, send them to SMU 360 login WITH instructions to return directly here
             if (!isAuthorized) {
                 document.documentElement.style.display = "none";
-                window.location.replace("https://smu360.smu.edu/home_login");
+                const returnUrl = encodeURIComponent("https://dedmansela.github.io/selaresources/?sela_key=" + VALID_TOKEN);
+                window.location.replace("https://smu360.smu.edu/home_login?redirect=" + returnUrl);
             }
         })();
     </script>
