@@ -18,10 +18,10 @@
             // 2. Check if this visitor is authorized
             const isAuthorized = localStorage.getItem("sela_member_unlocked") === "true";
 
-            // 3. If NOT authorized, send them directly to the SELA Useful Links tab on SMU 360
+            // 3. If NOT authorized, route directly to the main SELA club portal
             if (!isAuthorized) {
                 document.documentElement.style.display = "none";
-                window.location.replace("https://smu360.smu.edu/feeds?type=club&type_id=35796&tab=links");
+                window.location.replace("https://smu360.smu.edu/SELA/");
             }
         })();
     </script>
